@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小说阅读器</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+    }
+    .container {
+      width: 90%;
+      margin: auto;
+      max-width: 1000px;
+    }
+    .content {
+      line-height: 1.8;
+      font-size: 16px;
+    }
+    .font-size {
+      margin: 20px 0;
+    }
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>小说阅读器</h1>
+    <textarea id="novelContent" rows="10" placeholder="粘贴你的小说内容..." onchange="updateContent()"></textarea>
+    <div class="font-size">
+      <label for="fontSize">字体大小:</label>
+      <input type="range" id="fontSize" min="12" max="30" value="16" onchange="changeFontSize()" />
+    </div>
+    <div class="content" id="content"></div>
+  </div>
+
+  <script>
+    const contentArea = document.getElementById('content');
+    const novelContent = document.getElementById('novelContent');
+    const fontSize = document.getElementById('fontSize');
+
+    function updateContent() {
+      contentArea.innerHTML = novelContent.value.replace(/\n/g, '<br>'); // 每个换行符替换为 <br> 标签
+    }
+
+    function changeFontSize() {
+      contentArea.style.fontSize = fontSize.value + 'px'; // 更改字体大小
+    }
+    
+    updateContent();  // 初始内容更新
+  </script>
+</body>
+</html>
+  <div class="container">
+    <h1>图片上传与标签管理</h1>
+    <input type="file" id="imageInput" multiple onchange="handleFileSelect(event)">
+    <input type="text" class="tag-input" id="tagInput" placeholder="输入标签并按回车">
+    <div class="image-container" id="imageContainer"></div>
+  </div>
+
+  <script>
+    const imageInput = document.getElementById('imageInput');
+    const tagInput = document.getElementById('tagInput');
+    const imageContainer = document.getElementById('imageContainer');
+    let images = [];
+
+    // 上传图片并显示
+    function handleFileSelect(event) {
+      const files = event.target.files;
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const imgElement = document.createElement('img');
+          imgElement.src = e.target.result;
+          imageContainer.appendChild(imgElement);
+          images.push({ src: e.target.result, tags: [] });
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // 输入标签
+    tagInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        const tag = tagInput.value.trim();
+        if (tag) {
+          // 给图片添加标签
+          const activeImage = images[images.length - 1]; // 当前上传的图片
+          activeImage.tags.push(tag);
+          tagInput.value = ''; // 清空输入框
+        }
+      }
+    });
+  </script>
+</body>
+</html>
